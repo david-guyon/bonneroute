@@ -13,6 +13,7 @@ p.btn-group  {
 
 #map_canvas {
   margin: 0 auto;
-  width: 1000px;
+  border: 2px solid blue;
+  width: 290px;
   height: 380px;
 }
