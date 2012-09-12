@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Test Google Maps API</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" media="screen" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="bootstrap-responsive.min.css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="style.css" />
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap.js"></script>
+    <script 
+      type="text/javascript" 
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAkl1cK5NsXK5TKnj-3RvyVvhDAsVT8QiU&sensor=false&region=UK" >
+    </script>
+    <script type="text/javascript" >
+      
+    // Global Variables
+      var state = 0;
+      var coordStart = 0;
+      var coordEnd   = 0;
+
+    // Initilizer
+      function initialize() {
+        // Initialize global variables
+        state = 'Start';
+
+        // Create the map
+        var mapOptions = {
+          center: new google.maps.LatLng(55.973414,-3.188782),
+          zoom: 12,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDoubleClickZoom: true
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+        // Create the Start and the End marker
+        var markerStart = new google.maps.Marker({
+          map: map,
+          visible: false,
+          title: 'Start marker'
+        });
+        var markerEnd = new google.maps.Marker({
+          map: map,
+          visible: false,
+          title: 'End marker'
+        });
+
+        // Create the listener on mouse double click
+        google.maps.event.addListener(map, 'dblclick', function(event) {
+          if(state == 'Start') {
+            coordStart = event.latLng;
+            markerStart.setPosition(coordStart);
+            markerStart.visible = true;
+            alert('start marker');
+          }
+          else if(state == 'End') {
+            coordEnd = event.latLng;
+            markerEnd.setPosition(coordEnd);
+            markerEnd.visible = true;
+            alert('end marker');
+          }
+        });
+      }
+
+    // Global functions
+      function manageStarEnd(etat) {
+        var btnStart = document.getElementById('Start');
+        var btnEnd   = document.getElementById('End');
+        if(etat == 'Start') {
+          btnStart.className = "btn btn-small btn-success";
+          btnEnd.className   = "btn btn-small btn-primary";
+        }
+        else if(etat == 'End') {
+          btnStart.className = "btn btn-small btn-primary";
+          btnEnd.className   = "btn btn-small btn-success";
+        }
+        else console.warn("WTF!");
+        state = etat;
+        console.log(state);
+      }
+
+      function showCoordinates() {
+        if(coordStart == 0 || coordEnd == 0) {
+          alert('Dude! Choose put the Start and the End marker!');
+        }
+        else {
+          alert('Start : Lat('+coordStart.lat().toString()+'),Lng('+coordStart.lng().toString()+'\nEnd : Lat('+coordEnd.lat().toString()+',Lng('+coordEnd.lng().toString()+')');
+        }
+      }  
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body onload="initialize()">
+  <div class="container">
+    <p class="btn-group">
+      <a href="#" class="btn btn-small btn-primary" onclick="manageStarEnd('Start')" id="Start">Start</a>
+      <a href="#" class="btn btn-small btn-primary" onclick="manageStarEnd('End')" id="End">End</a>
+      <a href="#" class="btn btn-small btn-info" onclick="showCoordinates()" id="Show">Show Coordinates</a>
+    </p>
+    <div id="map_canvas" class=""></div>
+    <h4>How does it work</h4>
+    <p class="explanation">Double click on the map to put the start marker. Then, click on 'End' and double click on the map to put the end marker. You can modify the position of the 'Start' or 'End' marker by clicking on buttons. <br />Finaly, click on 'Show Coordinates' to see the 'Lat' and 'Lng' of each marker.
+    </p>
+  </div>
+  </body>
+</html>
