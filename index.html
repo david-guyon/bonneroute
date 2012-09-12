@@ -53,6 +53,7 @@
             coordStart = event.latLng;
             markerStart.setPosition(coordStart);
             markerStart.visible = true;
+            manageStarEnd('End');
           }
           else if(state == 'End') {
             coordEnd = event.latLng;
@@ -87,7 +88,7 @@
           alert('Dude! Put the Start and the End marker!');
         }
         else {
-          alert('Start : Lat('+coordStart.lat().toString()+'),Lng('+coordStart.lng().toString()+'\nEnd : Lat('+coordEnd.lat().toString()+',Lng('+coordEnd.lng().toString()+')');
+          document.getElementById("informations").innerHTML = 'Start : Lat('+coordStart.lat().toString()+'),Lng('+coordStart.lng().toString()+'\nEnd : Lat('+coordEnd.lat().toString()+',Lng('+coordEnd.lng().toString()+')';
         }
       }
 
@@ -100,6 +101,9 @@
         directionsService.route(request, function(result, status) {
           if(status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);
+            var infos = result.routes[0].legs[0];
+            document.getElementById("informations").innerHTML = 'Duration: '+infos.duration.text+'<br />'+
+                                                                'Distance: '+infos.distance.text;
           }
         });
       }
@@ -114,9 +118,8 @@
       <a href="#" class="btn btn-small btn-info" onclick="calculRoute()" id="Show">Calculate</a>
     </p>
     <div id="map_canvas" class=""></div>
-    <h4>How does it work</h4>
-    <p class="explanation">Double click on the map to put the start marker. Then, click on 'End' and double click on the map to put the end marker. You can modify the position of the 'Start' or 'End' marker by clicking on buttons. <br />Finaly, click on 'Show Coordinates' to see the 'Lat' and 'Lng' of each marker.
-    </p>
+    <h4>Informations: </h4>
+    <p class="explanation" id="informations"></p>
   </div>
   </body>
 </html>
