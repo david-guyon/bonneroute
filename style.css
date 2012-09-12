@@ -1,5 +1,5 @@
 .container {
-  width: 250px;
+  width: 300px;
 }
 
 p.explanation {
@@ -13,6 +13,6 @@ p.btn-group  {
 
 #map_canvas {
   margin: 0 auto;
-  width: 230px;
-  height: 320px;
+  width: 280px;
+  height: 380px;
 }
