@@ -1,6 +1,6 @@
 #container {
-  width:  540px;
-  height: 960px;
+  width:  450px;
+  height: 600px;
   border: 1px solid black;
   margin: 0 auto;
   position: relative;
@@ -41,37 +41,17 @@ p.btn-group  {
 }
 
 #StartMap{
-  width: 540px;
-  height: 800px;
-  position: absolute;
-  bottom:: 0;
+  width: 450px;
+  height: 530px;
 }
 
 #EndMap{
-  width: 540px;
-  height: 800px;
-  position: absolute;
-  bottom:: 0;
+  width: 450px;
+  height: 530px;
 }
 
 #ResultMap{
-  width: 540px;
-  height: 800px;
-  position: absolute;
-  bottom:: 0;
+  width: 450px;
+  height: 530px
 }
 
-@media only screen and (max-device-height:800px) {
-  #container {
-    height: 600px;
-  }
-  #StartMap {
-    height: 440px;
-  }
-  #EndMap {
-    height: 440px;
-  }
-  #ResultMap {
-    height: 440px;
-  }
-}

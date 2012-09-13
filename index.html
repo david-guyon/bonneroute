@@ -28,50 +28,18 @@
       var endMap;
         var endMarker;
       var resultMap;
+      var mapOptions = {
+        center: new google.maps.LatLng(55.973414,-3.188782),
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDoubleClickZoom: true
+      };
+      var startMap;
+      var endMap;   
+      var resultMap; 
 
     // Initilizer
       function initialize() {
-
-        // Create the map
-        var mapOptions = {
-          center: new google.maps.LatLng(55.973414,-3.188782),
-          zoom: 12,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDoubleClickZoom: true
-        };
-        var startMap  = new google.maps.Map(document.getElementById("StartMap"),  mapOptions);
-        var endMap    = new google.maps.Map(document.getElementById("EndMap"),    mapOptions);
-        var resultMap = new google.maps.Map(document.getElementById("ResultMap"), mapOptions);
-
-        // Create the Start and the End marker
-        var startMarker = new google.maps.Marker({
-          map: startMap,
-          visible: false,
-          title: 'Start Marker'
-        });
-        var endMarker = new google.maps.Marker({
-          map: endMap,
-          visible: false,
-          title: 'End Marker'
-        });
-
-        // Start: Create the listener on mouse double click
-        google.maps.event.addListener(startMap, 'dblclick', function(event) {
-            Datas.coordStart = event.latLng;
-            startMarker.setPosition(Datas.coordStart);
-            startMarker.visible = true;
-        });
-        
-        // End: Create the listener on mouse double click
-        google.maps.event.addListener(endMap, 'dblclick', function(event) {
-            Datas.coordEnd = event.latLng;
-            endMarker.setPosition(Datas.coordEnd);
-            endMarker.visible = true;
-        });
-
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        directionsDisplay.setMap(resultMap);
-
         managePages('Home');
       }
 
@@ -95,7 +63,7 @@
           if(status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);
             var infos = result.routes[0].legs[0];
-            alert('Duration: '+infos.duration.text+'\nDistance: '+infos.distance.value+' meters');
+            //alert('Duration: '+infos.duration.text+'\nDistance: '+infos.distance.value+' meters');
           }
         });
       }
@@ -118,6 +86,21 @@
               document.getElementById('EndMap').style.display         = 'none';
               document.getElementById('OptionsList').style.display    = 'none';
             document.getElementById('Results').style.display        = 'none';
+            startMap = new google.maps.Map(document.getElementById("StartMap"),  mapOptions);
+            
+            // Start: Create the listener on mouse double click
+            google.maps.event.addListener(startMap, 'dblclick', function(event) {
+              Datas.coordStart = event.latLng;
+              startMarker.setPosition(Datas.coordStart);
+              startMarker.visible = true;
+            });
+        
+            // Create the Start marker
+            var startMarker = new google.maps.Marker({
+              map: startMap,
+              visible: false,
+              title: 'Start Marker'
+            });
           break;  
 
           case 'End':
@@ -130,6 +113,20 @@
               document.getElementById('EndMap').style.display         = 'block';
               document.getElementById('OptionsList').style.display    = 'none';
             document.getElementById('Results').style.display        = 'none';
+            endMap = new google.maps.Map(document.getElementById("EndMap"),    mapOptions);
+            
+            // End: Create the listener on mouse double click
+            google.maps.event.addListener(endMap, 'dblclick', function(event) {
+              Datas.coordEnd = event.latLng;
+              endMarker.setPosition(Datas.coordEnd);
+              endMarker.visible = true;
+            });
+        
+            var endMarker = new google.maps.Marker({
+              map: endMap,
+              visible: false,
+              title: 'End Marker'
+            });
           break;
 
           case 'Options':
@@ -148,6 +145,9 @@
             document.getElementById('Home').style.display           = 'none';
             document.getElementById('Configuration').style.display  = 'none';
             document.getElementById('Results').style.display        = 'block';
+            resultMap = new google.maps.Map(document.getElementById("ResultMap"), mapOptions);
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            directionsDisplay.setMap(resultMap);
           break;
 
           default:
@@ -158,6 +158,7 @@
 
       function checkForm() {
         managePages('Results');
+        calculRoute();
       }
 
     </script>
