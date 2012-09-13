@@ -16,14 +16,14 @@
 
 #Explanation a {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 150px;
+  right: 170px;
 }
 
 #OptionsList [type=submit] {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 150px;
+  right: 170px;
 }
 
 #OptionsList form {
