@@ -87,7 +87,10 @@
               alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text+'\nCost: Free!');
             }
             else {
-              alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text+'\nCost: Wait for the version 2.0');
+              var miles = result.routes[0].legs[0].distance.value*0.621371192;
+              cost = (miles*0.4)/100;
+              cost = Math.round(cost*10)/100;
+              alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text+'\nCost: £'+cost.toString());
             }
             return result;
           }
