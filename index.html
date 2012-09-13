@@ -83,7 +83,12 @@
         directionsService.route(request, function(result, status) {
           if(status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);
-            alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text);
+            if(mode == 'biking' || mode == 'walking') {
+              alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text+'\nCost: Free!');
+            }
+            else {
+              alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text+'\nCost: Wait for the version 2.0');
+            }
             return result;
           }
         });
@@ -244,10 +249,10 @@
           <input type="checkbox" name="car" value="car" /> Car 
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="taxi" value="taxi" /> Taxi 
+          <input type="checkbox" name="taxi" value="taxi (wait for the version 2.0)" /> Taxi 
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="bus" value="bus" /> Bus 
+          <input type="checkbox" name="bus" value="bus (wait for the version 2.0)" /> Bus 
         </label>
         <input class="btn btn-success" type="submit" value="Calculate" onclick="checkForm(this.form)" />
     </div>
