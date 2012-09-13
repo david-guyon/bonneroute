@@ -156,9 +156,11 @@
         }
       }
 
-      function checkForm() {
+      function checkForm(form) {
         managePages('Results');
         calculRoute();
+        alert('Walking: '+form.walking.checked+'\nBiking: '+form.biking.checked);
+        return false; // Avoid a refresh page
       }
 
     </script>
@@ -194,24 +196,24 @@
     <div id="StartMap"></div>
     <div id="EndMap"></div>
     <div id="OptionsList">
-      <form>
+      <form method="post" name="checkbox-form" action="" onsubmit="return false;">
         <legend>By which type of transport</legend>
         <label class="checkbox">
-          <input type="checkbox" name="options" value="walking" /> Walking
+          <input type="checkbox" name="walking" value="walking" /> Walking
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="options" value="biking" /> Biking 
+          <input type="checkbox" name="biking" value="biking" /> Biking 
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="options" value="car" /> Car 
+          <input type="checkbox" name="car" value="car" /> Car 
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="options" value="taxi" /> Taxi 
+          <input type="checkbox" name="taxi" value="taxi" /> Taxi 
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="options" value="bus" /> Bus 
+          <input type="checkbox" name="bus" value="bus" /> Bus 
         </label>
-        <input class="btn btn-success" type="submit" onclick="checkForm()" />
+        <input class="btn btn-success" type="submit" value="Calculate" onclick="checkForm(this.form)" />
     </div>
   </div>
 
