@@ -15,16 +15,22 @@
     <script type="text/javascript" >
       
     // Global Variables
-      var state = 0;
-      var coordStart = 0;
-      var coordEnd   = 0;
+      var Datas = {
+        coordStart: 0,
+        coordEnd:   0,
+        actualPage: 'Home',
+        options:    new Array(),
+      }
       var directionsDisplay;
       var directionsService = new google.maps.DirectionsService();
+      var startMap;
+        var startMarker;
+      var endMap;
+        var endMarker;
+      var resultMap;
 
     // Initilizer
       function initialize() {
-        // Initialize global variables
-        state = 'Start';
 
         // Create the map
         var mapOptions = {
@@ -33,93 +39,197 @@
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           disableDoubleClickZoom: true
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        var startMap  = new google.maps.Map(document.getElementById("StartMap"),  mapOptions);
+        var endMap    = new google.maps.Map(document.getElementById("EndMap"),    mapOptions);
+        var resultMap = new google.maps.Map(document.getElementById("ResultMap"), mapOptions);
 
         // Create the Start and the End marker
-        var markerStart = new google.maps.Marker({
-          map: map,
+        var startMarker = new google.maps.Marker({
+          map: startMap,
           visible: false,
-          title: 'Start marker'
+          title: 'Start Marker'
         });
-        var markerEnd = new google.maps.Marker({
-          map: map,
+        var endMarker = new google.maps.Marker({
+          map: endMap,
           visible: false,
-          title: 'End marker'
+          title: 'End Marker'
         });
 
-        // Create the listener on mouse double click
-        google.maps.event.addListener(map, 'dblclick', function(event) {
-          if(state == 'Start') {
-            coordStart = event.latLng;
-            markerStart.setPosition(coordStart);
-            markerStart.visible = true;
-            manageStarEnd('End');
-          }
-          else if(state == 'End') {
-            coordEnd = event.latLng;
-            markerEnd.setPosition(coordEnd);
-            markerEnd.visible = true;
-          }
+        // Start: Create the listener on mouse double click
+        google.maps.event.addListener(startMap, 'dblclick', function(event) {
+            Datas.coordStart = event.latLng;
+            startMarker.setPosition(Datas.coordStart);
+            startMarker.visible = true;
+        });
+        
+        // End: Create the listener on mouse double click
+        google.maps.event.addListener(endMap, 'dblclick', function(event) {
+            Datas.coordEnd = event.latLng;
+            endMarker.setPosition(Datas.coordEnd);
+            endMarker.visible = true;
         });
 
         directionsDisplay = new google.maps.DirectionsRenderer();
-        directionsDisplay.setMap(map);
+        directionsDisplay.setMap(resultMap);
+
+        managePages('Home');
       }
 
     // Global functions
-      function manageStarEnd(etat) {
-        var btnStart = document.getElementById('Start');
-        var btnEnd   = document.getElementById('End');
-        if(etat == 'Start') {
-          btnStart.className = "btn btn-small btn-success";
-          btnEnd.className   = "btn btn-small btn-primary";
-        }
-        else if(etat == 'End') {
-          btnStart.className = "btn btn-small btn-primary";
-          btnEnd.className   = "btn btn-small btn-success";
-        }
-        else console.warn("WTF!");
-        state = etat;
-        console.log(state);
-      }
-
       function showCoordinates() {
-        if(coordStart == 0 || coordEnd == 0) {
+        if(Datas.coordStart == 0 || Datas.coordEnd == 0) {
           alert('Dude! Put the Start and the End marker!');
         }
         else {
-          document.getElementById("informations").innerHTML = 'Start : Lat('+coordStart.lat().toString()+'),Lng('+coordStart.lng().toString()+'\nEnd : Lat('+coordEnd.lat().toString()+',Lng('+coordEnd.lng().toString()+')';
+          alert('Start : Lat('+Datas.coordStart.lat().toString()+'),Lng('+Datas.coordStart.lng().toString()+'\nEnd : Lat('+Datas.coordEnd.lat().toString()+',Lng('+Datas.coordEnd.lng().toString()+')');
         }
       }
 
       function calculRoute() {
         var request = {
-          origin: coordStart,
-          destination: coordEnd,
+          origin: Datas.coordStart,
+          destination: Datas.coordEnd,
           travelMode: google.maps.TravelMode.WALKING
         };
         directionsService.route(request, function(result, status) {
           if(status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);
             var infos = result.routes[0].legs[0];
-            document.getElementById("informations").innerHTML = 'Duration: '+infos.duration.text+'<br />'+
-                                                                'Distance: '+infos.distance.text;
+            alert('Duration: '+infos.duration.text+'\nDistance: '+infos.distance.value+' meters');
           }
         });
       }
+
+      function managePages(page) {
+        switch(page) {
+          case 'Home':
+            document.getElementById('Home').style.display           = 'block';
+            document.getElementById('Configuration').style.display  = 'none';
+            document.getElementById('Results').style.display        = 'none';
+          break;
+
+          case 'Start':
+            document.getElementById('Home').style.display           = 'none';
+            document.getElementById('Configuration').style.display  = 'block';
+              document.getElementById('Start').className              = 'active';
+              document.getElementById('End').className                = '';
+              document.getElementById('Options').className            = '';
+              document.getElementById('StartMap').style.display       = 'block';
+              document.getElementById('EndMap').style.display         = 'none';
+              document.getElementById('OptionsList').style.display    = 'none';
+            document.getElementById('Results').style.display        = 'none';
+          break;  
+
+          case 'End':
+            document.getElementById('Home').style.display           = 'none';
+            document.getElementById('Configuration').style.display  = 'block';
+              document.getElementById('Start').className              = '';
+              document.getElementById('End').className                = 'active';
+              document.getElementById('Options').className            = '';
+              document.getElementById('StartMap').style.display       = 'none';
+              document.getElementById('EndMap').style.display         = 'block';
+              document.getElementById('OptionsList').style.display    = 'none';
+            document.getElementById('Results').style.display        = 'none';
+          break;
+
+          case 'Options':
+            document.getElementById('Home').style.display           = 'none';
+            document.getElementById('Configuration').style.display  = 'block';
+              document.getElementById('Start').className              = '';
+              document.getElementById('End').className                = '';
+              document.getElementById('Options').className            = 'active';
+              document.getElementById('StartMap').style.display       = 'none';
+              document.getElementById('EndMap').style.display         = 'none';
+              document.getElementById('OptionsList').style.display    = 'block';
+            document.getElementById('Results').style.display        = 'none';
+          break;
+
+          case 'Results':
+            document.getElementById('Home').style.display           = 'none';
+            document.getElementById('Configuration').style.display  = 'none';
+            document.getElementById('Results').style.display        = 'block';
+          break;
+
+          default:
+            managePages('Home');
+          break;
+        }
+      }
+
+      function checkForm() {
+        managePages('Results');
+      }
+
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body onload="initialize()">
-  <div class="container">
-    <p class="btn-group">
-      <a href="#" class="btn btn-small btn-primary" onclick="manageStarEnd('Start')" id="Start">Start</a>
-      <a href="#" class="btn btn-small btn-primary" onclick="manageStarEnd('End')" id="End">End</a>
-      <a href="#" class="btn btn-small btn-info" onclick="calculRoute()" id="Show">Calculate</a>
-    </p>
-    <div id="map_canvas" class=""></div>
-    <h4>Informations: </h4>
-    <p class="explanation" id="informations"></p>
+  <div id="container">
+
+  <div id="Home">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="#">Bonne Route</a>
+      </div>
+    </div>
+    <div id="Explanation">
+      <h4>Where are you?</h4>
+      <p>It's an application using Google Maps API to calcul for you the quickest, the cheapest and an mixed between the 2 first.</p>
+      <a class="btn btn-success" href="#" onclick="managePages('Start')">Let's Go</a>
+    </div>
+  </div>
+
+  <div id="Configuration">
+    <ul class="nav nav-tabs">
+      <li id="Start">
+        <a href="#" onclick="managePages('Start')">Start</a>
+      </li>
+      <li id="End">
+        <a href="#" onclick="managePages('End')">End</a>
+      </li>
+      <li id="Options">
+        <a href="#" onclick="managePages('Options')">Options</a>
+      </li>
+    </ul>
+    <div id="StartMap"></div>
+    <div id="EndMap"></div>
+    <div id="OptionsList">
+      <form>
+        <legend>By which type of transport</legend>
+        <label class="checkbox">
+          <input type="checkbox" name="options" value="walking" /> Walking
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" name="options" value="biking" /> Biking 
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" name="options" value="car" /> Car 
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" name="options" value="taxi" /> Taxi 
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" name="options" value="bus" /> Bus 
+        </label>
+        <input class="btn btn-success" type="submit" onclick="checkForm()" />
+    </div>
+  </div>
+
+  <div id="Results">
+    <ul class="nav nav-tabs">
+      <li id="Cheapest">
+        <a href="#" onclick="manageResults('Cheapest')">Cheapest</a>
+      </li>
+      <li id="Average">
+        <a href="#" onclick="manageResults('Average')">Average</a>
+      </li>
+      <li id="Quickest">
+        <a href="#" onclick="manageResults('Quickest')">Quickest</a>
+      </li>
+    </ul>
+    <div id="ResultMap"></div>
+    <div id="ResultList"></div>
+  </div>
+
   </div>
   </body>
 </html>

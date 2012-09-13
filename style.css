@@ -1,9 +1,38 @@
-.container {
-  width: 300px;
+#container {
+  width:  540px;
+  height: 960px;
+  border: 1px solid black;
+  margin: 0 auto;
+  position: relative;
 }
 
-p.explanation {
+#Explanation {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+#Explanation p {
   text-align: justify;
+}
+
+#Explanation a {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+#OptionsList [type=submit] {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+#OptionsList form {
+  margin-left: 60px;
+}
+
+#OptionsList form legend {
+  margin-left: -50px;
 }
 
 p.btn-group  {
@@ -11,9 +40,38 @@ p.btn-group  {
   margin-top: 5px;
 }
 
-#map_canvas {
-  margin: 0 auto;
-  border: 2px solid blue;
-  width: 290px;
-  height: 380px;
+#StartMap{
+  width: 540px;
+  height: 800px;
+  position: absolute;
+  bottom:: 0;
+}
+
+#EndMap{
+  width: 540px;
+  height: 800px;
+  position: absolute;
+  bottom:: 0;
+}
+
+#ResultMap{
+  width: 540px;
+  height: 800px;
+  position: absolute;
+  bottom:: 0;
+}
+
+@media only screen and (max-device-height:800px) {
+  #container {
+    height: 600px;
+  }
+  #StartMap {
+    height: 440px;
+  }
+  #EndMap {
+    height: 440px;
+  }
+  #ResultMap {
+    height: 440px;
+  }
 }
