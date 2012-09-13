@@ -1,7 +1,6 @@
 #container {
   width:  450px;
   height: 600px;
-  border: 1px solid black;
   margin: 0 auto;
   position: relative;
 }
@@ -42,16 +41,22 @@ p.btn-group  {
 
 #StartMap{
   width: 450px;
-  height: 530px;
+  height: 505px;
 }
 
 #EndMap{
   width: 450px;
-  height: 530px;
+  height: 505px;
 }
 
 #ResultMap{
   width: 450px;
-  height: 530px
+  height: 480px;
+}
+
+#Configuration p {
+  margin: 0 auto 20px auto;
+  text-align: center;
+  font-weight: bold;
 }
 

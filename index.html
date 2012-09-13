@@ -53,19 +53,41 @@
         }
       }
 
-      function calculRoute() {
-        var request = {
-          origin: Datas.coordStart,
-          destination: Datas.coordEnd,
-          travelMode: google.maps.TravelMode.WALKING
-        };
+      function calculRoute(mode) {
+        if(mode == 'biking') 
+        {
+          var request = {
+            origin: Datas.coordStart,
+            destination: Datas.coordEnd,
+            travelMode: google.maps.TravelMode.BICYCLING
+          };
+        }
+        else if(mode == 'car') {
+          var request = {
+            origin: Datas.coordStart,
+            destination: Datas.coordEnd,
+            travelMode: google.maps.TravelMode.DRIVING
+          }
+        }
+        else if(mode == 'walking') {
+          var request = {
+            origin: Datas.coordStart,
+            destination: Datas.coordEnd,
+            travelMode: google.maps.TravelMode.WALKING
+          }
+
+        }
+        else {
+          alert('woot');
+        }
         directionsService.route(request, function(result, status) {
           if(status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);
-            var infos = result.routes[0].legs[0];
-            //alert('Duration: '+infos.duration.text+'\nDistance: '+infos.distance.value+' meters');
+            alert('Duration: '+result.routes[0].legs[0].duration.text+'\nDistance: '+result.routes[0].legs[0].distance.text);
+            return result;
           }
         });
+        return false;
       }
 
       function managePages(page) {
@@ -82,6 +104,8 @@
               document.getElementById('Start').className              = 'active';
               document.getElementById('End').className                = '';
               document.getElementById('Options').className            = '';
+              document.getElementById('StartTxt').style.display       = 'block';
+              document.getElementById('EndTxt').style.display         = 'none';
               document.getElementById('StartMap').style.display       = 'block';
               document.getElementById('EndMap').style.display         = 'none';
               document.getElementById('OptionsList').style.display    = 'none';
@@ -109,6 +133,8 @@
               document.getElementById('Start').className              = '';
               document.getElementById('End').className                = 'active';
               document.getElementById('Options').className            = '';
+              document.getElementById('StartTxt').style.display       = 'none';
+              document.getElementById('EndTxt').style.display         = 'block';
               document.getElementById('StartMap').style.display       = 'none';
               document.getElementById('EndMap').style.display         = 'block';
               document.getElementById('OptionsList').style.display    = 'none';
@@ -135,6 +161,8 @@
               document.getElementById('Start').className              = '';
               document.getElementById('End').className                = '';
               document.getElementById('Options').className            = 'active';
+              document.getElementById('StartTxt').style.display       = 'none';
+              document.getElementById('EndTxt').style.display         = 'none';
               document.getElementById('StartMap').style.display       = 'none';
               document.getElementById('EndMap').style.display         = 'none';
               document.getElementById('OptionsList').style.display    = 'block';
@@ -158,9 +186,15 @@
 
       function checkForm(form) {
         managePages('Results');
-        calculRoute();
-        alert('Walking: '+form.walking.checked+'\nBiking: '+form.biking.checked);
-        return false; // Avoid a refresh page
+        if(form.biking.checked) {
+          calculRoute('biking');
+        }
+        else if(form.car.checked) {
+          calculRoute('car');
+        }
+        else if(form.walking.checked) {
+          calculRoute('walking');
+        }
       }
 
     </script>
@@ -193,7 +227,9 @@
         <a href="#" onclick="managePages('Options')">Options</a>
       </li>
     </ul>
+    <p id="StartTxt">Double click on the map to put the start marker</p>
     <div id="StartMap"></div>
+    <p id="EndTxt">Double click on the map to put the end marker</p>
     <div id="EndMap"></div>
     <div id="OptionsList">
       <form method="post" name="checkbox-form" action="" onsubmit="return false;">
@@ -202,7 +238,7 @@
           <input type="checkbox" name="walking" value="walking" /> Walking
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="biking" value="biking" /> Biking 
+          <input type="checkbox" name="biking" value="biking" /> Bicycling 
         </label>
         <label class="checkbox">
           <input type="checkbox" name="car" value="car" /> Car 
@@ -231,6 +267,7 @@
     </ul>
     <div id="ResultMap"></div>
     <div id="ResultList"></div>
+    <p id="informations"></p>
   </div>
 
   </div>
